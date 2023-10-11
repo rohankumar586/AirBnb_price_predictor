@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/omsan/Desktop/Om/Mcgill/MMA%202023/Fall%202023/Data%20Mining/Assignments/Group%20Assignment/INSY662-Group-Project/mlruns/281788229826556972/d5abc36fa7404c68a5c3f16afd46dae8/artifacts
+end_time: 1697042916101
+entry_point_name: ''
+experiment_id: '281788229826556972'
+lifecycle_stage: active
+run_id: d5abc36fa7404c68a5c3f16afd46dae8
+run_name: Passive Aggressive Regressor
+run_uuid: d5abc36fa7404c68a5c3f16afd46dae8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697042915903
+status: 3
+tags: []
+user_id: omsan

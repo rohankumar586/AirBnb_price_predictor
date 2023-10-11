@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/omsan/Desktop/Om/Mcgill/MMA%202023/Fall%202023/Data%20Mining/Assignments/Group%20Assignment/INSY662-Group-Project/mlruns/281788229826556972/a0d101f0aa6a4ac3bea57dca30705f6f/artifacts
+end_time: 1697044720339
+entry_point_name: ''
+experiment_id: '281788229826556972'
+lifecycle_stage: active
+run_id: a0d101f0aa6a4ac3bea57dca30705f6f
+run_name: Ridge Regression
+run_uuid: a0d101f0aa6a4ac3bea57dca30705f6f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697044720129
+status: 3
+tags: []
+user_id: omsan

@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/omsan/Desktop/Om/Mcgill/MMA%202023/Fall%202023/Data%20Mining/Assignments/Group%20Assignment/INSY662-Group-Project/mlruns/281788229826556972/090ee7a2fabd49e8b804c1b1be03af01/artifacts
+end_time: 1697042910595
+entry_point_name: ''
+experiment_id: '281788229826556972'
+lifecycle_stage: active
+run_id: 090ee7a2fabd49e8b804c1b1be03af01
+run_name: Gradient Boosting Regressor
+run_uuid: 090ee7a2fabd49e8b804c1b1be03af01
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697042910418
+status: 3
+tags: []
+user_id: omsan

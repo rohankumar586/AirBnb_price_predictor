@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/omsan/Desktop/Om/Mcgill/MMA%202023/Fall%202023/Data%20Mining/Assignments/Group%20Assignment/INSY662-Group-Project/mlruns/281788229826556972/9ee3ef8a69cc4d57808d1e6a97bc5417/artifacts
+end_time: 1697044978411
+entry_point_name: ''
+experiment_id: '281788229826556972'
+lifecycle_stage: active
+run_id: 9ee3ef8a69cc4d57808d1e6a97bc5417
+run_name: AdaBoost Regressor
+run_uuid: 9ee3ef8a69cc4d57808d1e6a97bc5417
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697044978249
+status: 3
+tags: []
+user_id: omsan

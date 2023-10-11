@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/omsan/Desktop/Om/Mcgill/MMA%202023/Fall%202023/Data%20Mining/Assignments/Group%20Assignment/INSY662-Group-Project/mlruns/281788229826556972/df8e9998e56b4977906255780b50a53b/artifacts
+end_time: 1697044977619
+entry_point_name: ''
+experiment_id: '281788229826556972'
+lifecycle_stage: active
+run_id: df8e9998e56b4977906255780b50a53b
+run_name: Orthogonal Matching Pursuit
+run_uuid: df8e9998e56b4977906255780b50a53b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697044977463
+status: 3
+tags: []
+user_id: omsan

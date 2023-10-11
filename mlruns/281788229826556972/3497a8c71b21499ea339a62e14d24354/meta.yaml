@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/omsan/Desktop/Om/Mcgill/MMA%202023/Fall%202023/Data%20Mining/Assignments/Group%20Assignment/INSY662-Group-Project/mlruns/281788229826556972/3497a8c71b21499ea339a62e14d24354/artifacts
+end_time: 1697044979279
+entry_point_name: ''
+experiment_id: '281788229826556972'
+lifecycle_stage: active
+run_id: 3497a8c71b21499ea339a62e14d24354
+run_name: Huber Regressor
+run_uuid: 3497a8c71b21499ea339a62e14d24354
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697044979088
+status: 3
+tags: []
+user_id: omsan

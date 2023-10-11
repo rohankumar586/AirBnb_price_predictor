@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/omsan/Desktop/Om/Mcgill/MMA%202023/Fall%202023/Data%20Mining/Assignments/Group%20Assignment/INSY662-Group-Project/mlruns/281788229826556972/16032e1937914197909846f2fdce03fc/artifacts
+end_time: 1697042855050
+entry_point_name: ''
+experiment_id: '281788229826556972'
+lifecycle_stage: active
+run_id: 16032e1937914197909846f2fdce03fc
+run_name: Session Initialized 753e
+run_uuid: 16032e1937914197909846f2fdce03fc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697042147273
+status: 3
+tags: []
+user_id: omsan

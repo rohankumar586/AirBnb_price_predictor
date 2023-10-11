@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/omsan/Desktop/Om/Mcgill/MMA%202023/Fall%202023/Data%20Mining/Assignments/Group%20Assignment/INSY662-Group-Project/mlruns/281788229826556972/edca6dbef7214dfe9892c365b3eb0f7c/artifacts
+end_time: 1697042914223
+entry_point_name: ''
+experiment_id: '281788229826556972'
+lifecycle_stage: active
+run_id: edca6dbef7214dfe9892c365b3eb0f7c
+run_name: Dummy Regressor
+run_uuid: edca6dbef7214dfe9892c365b3eb0f7c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697042914061
+status: 3
+tags: []
+user_id: omsan

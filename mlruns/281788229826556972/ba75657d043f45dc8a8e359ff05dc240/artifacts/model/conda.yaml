@@ -1,0 +1,8 @@
+channels:
+- conda-forge
+dependencies:
+- pip<=21.2.4
+- pip:
+  - mlflow==2.7.1
+  - pycaret==3.1.0
+name: airbnb_price_prediction-env
