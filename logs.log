@@ -29153,3 +29153,29 @@ Alternately, you can install this by running `pip install pycaret[models]`
 2023-10-11 13:30:29,140:WARNING:No coef_ found. Trying feature_importances_
 2023-10-11 13:30:29,405:INFO:Visual Rendered Successfully
 2023-10-11 13:30:29,482:INFO:plot_model() successfully completed......................................
+2023-10-11 13:50:30,657:INFO:Initializing plot_model()
+2023-10-11 13:50:30,665:INFO:plot_model(plot=pipeline, fold=KFold(n_splits=10, random_state=None, shuffle=False), verbose=False, display=None, display_format=None, estimator=LGBMRegressor(n_jobs=-1, random_state=123), feature_name=None, fit_kwargs={}, groups=None, label=False, plot_kwargs=None, save=False, scale=1, self=<pycaret.regression.oop.RegressionExperiment object at 0x0000028D0CADD910>, system=True)
+2023-10-11 13:50:30,665:INFO:Checking exceptions
+2023-10-11 13:50:30,697:INFO:Preloading libraries
+2023-10-11 13:50:30,713:INFO:Copying training dataset
+2023-10-11 13:50:30,713:INFO:Plot type: pipeline
+2023-10-11 13:50:31,029:INFO:Visual Rendered Successfully
+2023-10-11 13:50:31,270:INFO:plot_model() successfully completed......................................
+2023-10-11 13:50:39,405:INFO:Initializing plot_model()
+2023-10-11 13:50:39,405:INFO:plot_model(plot=parameter, fold=KFold(n_splits=10, random_state=None, shuffle=False), verbose=False, display=None, display_format=None, estimator=LGBMRegressor(n_jobs=-1, random_state=123), feature_name=None, fit_kwargs={}, groups=None, label=False, plot_kwargs=None, save=False, scale=1, self=<pycaret.regression.oop.RegressionExperiment object at 0x0000028D0CADD910>, system=True)
+2023-10-11 13:50:39,405:INFO:Checking exceptions
+2023-10-11 13:50:39,413:INFO:Preloading libraries
+2023-10-11 13:50:39,421:INFO:Copying training dataset
+2023-10-11 13:50:39,421:INFO:Plot type: parameter
+2023-10-11 13:50:39,429:INFO:Visual Rendered Successfully
+2023-10-11 13:50:39,563:INFO:plot_model() successfully completed......................................
+2023-10-11 13:50:42,327:INFO:Initializing plot_model()
+2023-10-11 13:50:42,327:INFO:plot_model(plot=residuals, fold=KFold(n_splits=10, random_state=None, shuffle=False), verbose=False, display=None, display_format=None, estimator=LGBMRegressor(n_jobs=-1, random_state=123), feature_name=None, fit_kwargs={}, groups=None, label=False, plot_kwargs=None, save=False, scale=1, self=<pycaret.regression.oop.RegressionExperiment object at 0x0000028D0CADD910>, system=True)
+2023-10-11 13:50:42,327:INFO:Checking exceptions
+2023-10-11 13:50:42,327:INFO:Preloading libraries
+2023-10-11 13:50:42,335:INFO:Copying training dataset
+2023-10-11 13:50:42,335:INFO:Plot type: residuals
+2023-10-11 13:50:42,618:INFO:Fitting Model
+2023-10-11 13:50:42,712:INFO:Scoring test/hold-out set
+2023-10-11 13:50:43,319:INFO:Visual Rendered Successfully
+2023-10-11 13:50:43,419:INFO:plot_model() successfully completed......................................
