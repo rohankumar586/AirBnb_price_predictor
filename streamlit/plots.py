@@ -52,12 +52,12 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
     ax = sns.boxplot(
         data=data[
             data["neighbourhood_cleansed"].isin(
-                num_listings_by_neighborhood.iloc[:15].neighbourhood.values
+                num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values
             )
         ],
         y="neighbourhood_cleansed",
         x="price",
-        order=num_listings_by_neighborhood.iloc[:15].neighbourhood.values,
+        order=num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values,
         palette="Reds_r",
     )
     ax.set_title(
@@ -71,13 +71,13 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
         (
             data[
                 data["neighbourhood_cleansed"].isin(
-                    num_listings_by_neighborhood.iloc[:15].neighbourhood.values
+                    num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values
                 )
             ]
             .groupby("neighbourhood_cleansed")["price"]
             .agg(["mean", "count"])
         )
-        .reindex(index=num_listings_by_neighborhood.iloc[:15].neighbourhood.values)
+        .reindex(index=num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values)
         .reset_index()
     )
 
@@ -86,7 +86,7 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
         avg_price_by_neighborhood,
         y="neighbourhood_cleansed",
         x="mean",
-        order=num_listings_by_neighborhood.iloc[:15].neighbourhood.values,
+        order=num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values,
         palette="Reds_r",
     )
 
