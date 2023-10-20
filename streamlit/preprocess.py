@@ -25,7 +25,7 @@ def preprocess(data: pd.DataFrame) -> pd.DataFrame:
         else:
             raise ValueError(f"Unknown dtype: {dtype}")
 
-    data["price"] = data["price"].str.replace(r"(\$|,)", "").astype(float)
+    data["price"] = data["price"].str.replace(r"[\$|,]", "", regex=True).astype(float)
     data["amenities"] = data["amenities"].str.replace(r"\[|\]|\"", "")
 
     data_cleaned = data[
