@@ -47,21 +47,21 @@ def preprocess(data: pd.DataFrame) -> pd.DataFrame:
         "bedrooms"
     ].transform(lambda x: x.fillna(x.median()))
 
-    list_of_amenities = (
-        data_cleaned["amenities"]
-        .str.split(", ")
-        .explode()
-        .value_counts()
-        .to_frame()
-        .reset_index()
-    )
+    # list_of_amenities = (
+    #     data_cleaned["amenities"]
+    #     .str.split(", ")
+    #     .explode()
+    #     .value_counts()
+    #     .to_frame()
+    #     .reset_index()
+    # )
 
-    top_20_amenities = list_of_amenities.head(20)["index"].to_list()
+    # top_20_amenities = list_of_amenities.head(20)["index"].to_list()
 
-    data_cleaned["num_amenities"] = (
-        data_cleaned["amenities"]
-        .apply(lambda x: x.split(", "))
-        .apply(lambda y: len(set(y).intersection(set(top_20_amenities))))
-    )
+    # data_cleaned["num_amenities"] = (
+    #     data_cleaned["amenities"]
+    #     .apply(lambda x: x.split(", "))
+    #     .apply(lambda y: len(set(y).intersection(set(top_20_amenities))))
+    # )
 
     return data_cleaned
