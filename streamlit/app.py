@@ -52,7 +52,9 @@ if city:
             price_by_neighbourhood = plots.price_by_neighbourhood(data, city_name)
 
             with st.expander("Count of listings by neighbourhood"):
-                st.dataframe(price_by_neighbourhood[0], use_container_width=True)
+                st.dataframe(
+                    price_by_neighbourhood[0], hide_index=True, use_container_width=True
+                )
 
             with st.expander("Price distribution by neighbourhood"):
                 st.pyplot(price_by_neighbourhood[1])
@@ -64,7 +66,9 @@ if city:
             price_by_room_type = plots.price_by_room_type(data, city_name)
 
             with st.expander("Count of listings by room type"):
-                st.dataframe(price_by_room_type[0], use_container_width=True)
+                st.dataframe(
+                    price_by_room_type[0], hide_index=True, use_container_width=True
+                )
 
             with st.expander("Price distribution by room type"):
                 st.pyplot(price_by_room_type[1])

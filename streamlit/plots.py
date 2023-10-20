@@ -40,7 +40,7 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
                 props=[("font-size", "14px"), ("font-weight", "bold")],
             ),
         ],
-    ).hide_index().set_caption(
+    ).set_caption(
         f"Number of listings by neighborhood in {city.capitalize()}"
     ).relabel_index(
         {0: "Neighborhood", 1: "# of listings"},
@@ -129,7 +129,7 @@ def price_by_room_type(data: pd.DataFrame, city: str):
                 props=[("font-size", "14px"), ("font-weight", "bold")],
             ),
         ],
-    ).hide_index().set_caption(
+    ).set_caption(
         f"Number of listings by room type in {city.capitalize()}"
     ).relabel_index(
         {0: "Room type", 1: "# of listings"},
