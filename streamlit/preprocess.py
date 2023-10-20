@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 
-@st.cache_data()
+@st.cache_data(persist=True)
 def preprocess(data: pd.DataFrame) -> pd.DataFrame:
     object_to_dtype = {
         "host_since": "datetime64[ns]",
