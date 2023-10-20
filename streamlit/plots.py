@@ -48,6 +48,7 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
     # )
 
     # Then, we see the price of listings in the top 15 neighbourhoods
+    st.write(num_listings_by_neighborhood)
     fig_1 = plt.figure(figsize=(10, 12))
     ax = sns.boxplot(
         data=data[
