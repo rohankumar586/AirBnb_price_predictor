@@ -30,22 +30,22 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
         .rename(columns={"index": "neighbourhood", "neighbourhood_cleansed": "count"})
     )
 
-    num_listings_by_neighborhood.style.background_gradient(
-        sns.light_palette("red", as_cmap=True)
-    ).set_properties(**{"text-align": "center"}).set_table_styles(
-        [
-            dict(selector="th", props=[("text-align", "center")]),
-            dict(
-                selector="caption",
-                props=[("font-size", "14px"), ("font-weight", "bold")],
-            ),
-        ],
-    ).set_caption(
-        f"Number of listings by neighborhood in {city.capitalize()}"
-    ).relabel_index(
-        {0: "Neighborhood", 1: "# of listings"},
-        axis="columns",
-    )
+    # num_listings_by_neighborhood.style.background_gradient(
+    #     sns.light_palette("red", as_cmap=True)
+    # ).set_properties(**{"text-align": "center"}).set_table_styles(
+    #     [
+    #         dict(selector="th", props=[("text-align", "center")]),
+    #         dict(
+    #             selector="caption",
+    #             props=[("font-size", "14px"), ("font-weight", "bold")],
+    #         ),
+    #     ],
+    # ).set_caption(
+    #     f"Number of listings by neighborhood in {city.capitalize()}"
+    # ).relabel_index(
+    #     {0: "Neighborhood", 1: "# of listings"},
+    #     axis="columns",
+    # )
 
     # Then, we see the price of listings in the top 15 neighbourhoods
     fig_1 = plt.figure(figsize=(10, 12))
@@ -119,22 +119,22 @@ def price_by_room_type(data: pd.DataFrame, city: str):
         .rename(columns={"index": "room_type", "room_type": "count"})
     )
 
-    num_listings_by_room_type.style.background_gradient(
-        sns.light_palette("red", as_cmap=True)
-    ).set_properties(**{"text-align": "center"}).set_table_styles(
-        [
-            dict(selector="th", props=[("text-align", "center")]),
-            dict(
-                selector="caption",
-                props=[("font-size", "14px"), ("font-weight", "bold")],
-            ),
-        ],
-    ).set_caption(
-        f"Number of listings by room type in {city.capitalize()}"
-    ).relabel_index(
-        {0: "Room type", 1: "# of listings"},
-        axis="columns",
-    )
+    # num_listings_by_room_type.style.background_gradient(
+    #     sns.light_palette("red", as_cmap=True)
+    # ).set_properties(**{"text-align": "center"}).set_table_styles(
+    #     [
+    #         dict(selector="th", props=[("text-align", "center")]),
+    #         dict(
+    #             selector="caption",
+    #             props=[("font-size", "14px"), ("font-weight", "bold")],
+    #         ),
+    #     ],
+    # ).set_caption(
+    #     f"Number of listings by room type in {city.capitalize()}"
+    # ).relabel_index(
+    #     {0: "Room type", 1: "# of listings"},
+    #     axis="columns",
+    # )
 
     fig = plt.figure(figsize=(12, 10))
     ax = sns.violinplot(
