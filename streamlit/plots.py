@@ -9,7 +9,7 @@ sns.set_style("whitegrid")
 sns.set_context("talk")
 
 
-@st.cache_data(persist=True)
+# @st.cache_data(persist=True)
 def price_distribution(data: pd.DataFrame, city: str) -> plt.Axes:
     fig = plt.figure(figsize=(12, 4))
     ax = sns.histplot(data=data, x="price", color="r", bins=20, kde=True)
@@ -20,7 +20,7 @@ def price_distribution(data: pd.DataFrame, city: str) -> plt.Axes:
     return fig
 
 
-@st.cache_data(persist=True)
+# @st.cache_data(persist=True)
 def price_by_neighbourhood(data: pd.DataFrame, city: str):
     num_listings_by_neighborhood = (
         data["neighbourhood_cleansed"]
@@ -108,7 +108,7 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
     return num_listings_by_neighborhood, fig_1, fig_2
 
 
-@st.cache_data(persist=True)
+# @st.cache_data(persist=True)
 def price_by_room_type(data: pd.DataFrame, city: str):
     # First, we check the `room_type` column
     num_listings_by_room_type = (

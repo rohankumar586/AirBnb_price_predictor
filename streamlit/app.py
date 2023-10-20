@@ -8,7 +8,7 @@ import plots as plots
 st.set_page_config(page_title="Airbnb EDA", page_icon=":house:", layout="wide")
 
 
-@st.cache_data(persist=True)
+# @st.cache_data(persist=True)
 def load_data(city):
     data = pd.read_csv(f"./data/{city}")
     data = preprocess.preprocess(data)
