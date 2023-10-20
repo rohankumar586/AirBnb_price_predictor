@@ -23,10 +23,11 @@ def price_distribution(data: pd.DataFrame, city: str) -> plt.Axes:
 # @st.cache_data(persist=True)
 def price_by_neighbourhood(data: pd.DataFrame, city: str):
     num_listings_by_neighborhood = (
-        data["neighbourhood_cleansed"].value_counts()
+        data["neighbourhood_cleansed"]
+        .value_counts()
         # .to_frame()
-        # .reset_index()
-        # .rename(columns={"index": "neighbourhood", "neighbourhood_cleansed": "count"})
+        .reset_index()
+        .rename(columns={"index": "neighbourhood", "neighbourhood_cleansed": "count"})
     )
 
     # num_listings_by_neighborhood.style.background_gradient(
