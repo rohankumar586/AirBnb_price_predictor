@@ -64,4 +64,14 @@ def preprocess(data: pd.DataFrame) -> pd.DataFrame:
         .apply(lambda y: len(set(y).intersection(set(top_20_amenities))))
     )
 
+    amenities_dummies = (
+        data_cleaned["amenities"]
+        .apply(
+            lambda x: ";".join(set(x.split(", ")).intersection(set(top_20_amenities)))
+        )
+        .str.get_dummies(sep=";")
+    )
+
+    data_cleaned = pd.concat([data_cleaned, amenities_dummies], axis=1)
+
     return data_cleaned

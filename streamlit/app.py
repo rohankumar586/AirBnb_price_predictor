@@ -1,4 +1,5 @@
 import os
+from pyparsing import col
 import streamlit as st
 import pandas as pd
 import preprocess as preprocess
@@ -15,19 +16,26 @@ def load_data(city):
     return data
 
 
-# Set the title
-st.title("Airbnb Analysis")
-st.subheader("INSY 662 - Group Project")
-
 # Get filename of cities in data folder
 cities = os.listdir("./data")
 city_names = [city.split(".")[0].capitalize() for city in cities]
 cities = dict(zip(city_names, cities))
 
 # Create a selectbox to choose a city
-city = st.selectbox("#### Select a city", cities, index=2)
+with st.sidebar:
+    st.title("Navigation")
+    st.markdown(
+        """
+    This application provides various visualizations for Airbnb data analysis. 
+    Select a city from the dropdown menu to view specific insights.
+    """
+    )
+    st.header("Select a city")
+    city = st.selectbox("Cities", cities, index=2, help="Select a city to view data")
 
 if city:
+    # Set the title
+    st.title(f"Airbnb Analysis: {city.capitalize()}")
     with st.container():
         city_name, file = city, cities[city]
         data = load_data(file)
@@ -36,45 +44,81 @@ if city:
         )
 
         # Tabs to select different plots
-        tab_1, tab_2, tab_3, tab_4 = st.tabs(
+        tab_1, tab_2, tab_3, tab_4, tab_5 = st.tabs(
             [
                 "Price Distribution",
+                "Map of Listings",
                 "Price by Neighbourhood",
                 "Price by Room Type",
-                "Map",
+                "Price by Amenities",
             ]
         )
 
         with tab_1:
-            st.pyplot(plots.price_distribution(data, city_name))
+            st.markdown("## Price Distribution Overview")
+            st.markdown(
+                "This tab shows the overall distribution of listing prices within the selected city."
+            )
+            st.plotly_chart(
+                plots.price_distribution(data, city_name), use_container_width=True
+            )
 
         with tab_2:
-            price_by_neighbourhood = plots.price_by_neighbourhood(data, city_name)
-
-            with st.expander("Count of listings by neighbourhood"):
-                st.dataframe(
-                    price_by_neighbourhood[0], hide_index=True, use_container_width=True
-                )
-
-            with st.expander("Price distribution by neighbourhood"):
-                st.pyplot(price_by_neighbourhood[1])
-
-            with st.expander("Average price by neighbourhood"):
-                st.pyplot(price_by_neighbourhood[2])
-
-        with tab_3:
-            price_by_room_type = plots.price_by_room_type(data, city_name)
-
-            with st.expander("Count of listings by room type"):
-                st.dataframe(
-                    price_by_room_type[0], hide_index=True, use_container_width=True
-                )
-
-            with st.expander("Price distribution by room type"):
-                st.pyplot(price_by_room_type[1])
-
-        with tab_4:
             map = plots.visualize_on_map(data)
-            # map_html = map._repr_html_()
 
             st.components.v1.html(map, height=500)
+
+        with tab_3:
+            st.markdown("## Neighborhood Analysis")
+            st.markdown(
+                """
+                Explore how listing prices vary by neighborhood. 
+                Insights include the count of listings, price distribution, and average prices per neighborhood.
+                """
+            )
+
+            # Organizing content in columns
+            col1, col2 = st.columns(2)
+
+            price_by_neighbourhood = plots.price_by_neighbourhood(data, city_name)
+            with col1:
+                st.plotly_chart(price_by_neighbourhood[0], use_container_width=True)
+
+            with col2:
+                st.plotly_chart(price_by_neighbourhood[1], use_container_width=True)
+
+            st.plotly_chart(price_by_neighbourhood[2], use_container_width=True)
+
+        with tab_4:
+            st.markdown("## Room Type Analysis")
+            st.markdown(
+                """
+                Explore how listing prices vary by room type. 
+                Insights include the count of listings and price distribution by room type.
+                """
+            )
+
+            price_by_room_type = plots.price_by_room_type(data, city_name)
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.plotly_chart(price_by_room_type[0], use_container_width=True)
+
+            with col2:
+                st.plotly_chart(price_by_room_type[1], use_container_width=True)
+
+        with tab_5:
+            st.markdown("## Amenities Analysis")
+            st.markdown(
+                """
+                Explore how listing prices vary by amenities. 
+                Insights include the count of listings and price distribution by amenities for the top 20 amenities.
+                """
+            )
+
+            price_by_amenities = plots.price_by_amenities(data, city_name)
+
+            st.plotly_chart(price_by_amenities[0], use_container_width=True)
+
+            st.plotly_chart(price_by_amenities[1], use_container_width=True)

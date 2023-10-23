@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.figure_factory as ff
+from plotly.subplots import make_subplots
 import seaborn as sns
 import folium
 from folium import plugins, branca
@@ -8,15 +12,32 @@ from folium import plugins, branca
 sns.set_style("whitegrid")
 sns.set_context("talk")
 
+tickprefixes_city = {
+    "Boston": "US$",
+    "Hongkong": "HK$",
+    "Montreal": "CA$",
+    "Munich": "€",
+    "Vancouver": "CA$",
+}
+
 
 @st.cache_data(persist=True)
-def price_distribution(data: pd.DataFrame, city: str) -> plt.Axes:
-    fig = plt.figure(figsize=(12, 4))
-    ax = sns.histplot(data=data, x="price", color="r", bins=20, kde=True)
-    ax.set_title(f"Price distribution in {city.capitalize()}")
-    ax.set_xlabel("Price")
+def price_distribution(data: pd.DataFrame, city: str):
+    fig = ff.create_distplot(
+        [data["price"]],
+        group_labels=["Price"],
+        colors=["red"],
+        bin_size=25,
+        show_rug=False,
+    )
 
-    plt.tight_layout()
+    fig.update_layout(
+        title=f"Price distribution in {city.capitalize()}",
+        xaxis_title="Price",
+        yaxis_title="Density",
+        showlegend=False,
+    )
+
     return fig
 
 
@@ -30,82 +51,119 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
         .rename(columns={"index": "neighbourhood", "neighbourhood_cleansed": "count"})
     )
 
-    # num_listings_by_neighborhood.style.background_gradient(
-    #     sns.light_palette("red", as_cmap=True)
-    # ).set_properties(**{"text-align": "center"}).set_table_styles(
-    #     [
-    #         dict(selector="th", props=[("text-align", "center")]),
-    #         dict(
-    #             selector="caption",
-    #             props=[("font-size", "14px"), ("font-weight", "bold")],
-    #         ),
-    #     ],
-    # ).set_caption(
-    #     f"Number of listings by neighborhood in {city.capitalize()}"
-    # ).relabel_index(
-    #     {0: "Neighborhood", 1: "# of listings"},
-    #     axis="columns",
-    # )
+    # -------------------------------------------------------------------------
+    colors = px.colors.qualitative.Set1 * (
+        len(num_listings_by_neighborhood) // len(px.colors.qualitative.Set1) + 1
+    )
 
-    # Then, we see the price of listings in the top 15 neighbourhoods
-    fig_1 = plt.figure(figsize=(10, 12))
-    ax = sns.boxplot(
-        data=data[
-            data["neighbourhood_cleansed"].isin(
-                num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values
+    fig_0 = go.Figure(
+        data=[
+            go.Bar(
+                x=num_listings_by_neighborhood["neighbourhood"],
+                y=num_listings_by_neighborhood["count"],
+                marker_color=colors[: len(num_listings_by_neighborhood)],
+                hovertemplate="Number of listings: %{y}<extra></extra>",
             )
-        ],
-        y="neighbourhood_cleansed",
-        x="price",
-        order=num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values,
-        palette="Reds_r",
+        ]
     )
-    ax.set_title(
-        f"Distribution of price in {city.capitalize()} by neighbourhood (top 15)"
-    )
-    ax.set_ylabel("Neighbourhood")
-    ax.set_xlabel("Price")
 
-    # Finally, we plot the mean price of listings in the top 15 neighbourhoods
+    fig_0.update_layout(
+        title=f"Number of listings by neighbourhood in {city.capitalize()}",
+        xaxis_title="Neighbourhood",
+        yaxis_title="Number of listings",
+        template="plotly_white",
+        height=600,
+        margin=dict(l=100, r=100, b=200, t=50),
+    )
+
+    # -------------------------------------------------------------------------
+    # Then, we see the price of listings in the top 10 neighbourhoods
+    top_neighborhoods = num_listings_by_neighborhood.iloc[:10]["neighbourhood"].values
+    data_top_neighborhoods = data[
+        data["neighbourhood_cleansed"].isin(top_neighborhoods)
+    ]
+
+    # Create a box plot for each of the top 10 neighborhoods
+    fig_1 = go.Figure()
+
+    for neighborhood in top_neighborhoods:
+        neighborhood_data = data_top_neighborhoods[
+            data_top_neighborhoods["neighbourhood_cleansed"] == neighborhood
+        ]
+        fig_1.add_trace(
+            go.Box(
+                y=neighborhood_data["price"],
+                name=neighborhood,
+                marker=dict(
+                    color="rgb(8,81,156)",
+                ),
+            )
+        )
+
+    # Update layout for a cleaner presentation
+    fig_1.update_layout(
+        title=f"Distribution of price in {city.capitalize()} by neighbourhood (top 10)",
+        xaxis_title="Price",
+        yaxis_title="Neighbourhood",
+        showlegend=False,
+        template="plotly_white",
+        height=600,
+        margin=dict(l=100, r=100, b=200, t=50),
+    )
+
+    fig_1.update_yaxes(
+        tickprefix=tickprefixes_city[city], showgrid=True, gridcolor="rgb(233,233,233)"
+    )
+
+    # -------------------------------------------------------------------------
+    # Calculate the average price for the top 10 neighborhoods
     avg_price_by_neighborhood = (
         (
             data[
                 data["neighbourhood_cleansed"].isin(
-                    num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values
+                    num_listings_by_neighborhood.iloc[:10]["neighbourhood"].values
                 )
             ]
             .groupby("neighbourhood_cleansed")["price"]
             .agg(["mean", "count"])
         )
-        .reindex(index=num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values)
+        .reindex(index=num_listings_by_neighborhood.iloc[:10]["neighbourhood"].values)
         .reset_index()
     )
 
-    fig_2 = plt.figure(figsize=(10, 12))
-    ax = sns.barplot(
-        avg_price_by_neighborhood,
-        y="neighbourhood_cleansed",
-        x="mean",
-        order=num_listings_by_neighborhood.iloc[:15]["neighbourhood"].values,
-        palette="Reds_r",
-    )
+    # Create a bar plot for the average price by neighbourhood
+    fig_2 = go.Figure()
 
-    for i in range(15):
-        ax.text(
-            0,
-            i,
-            f"N={avg_price_by_neighborhood.iloc[i]['count']}",
-            va="center",
-            fontsize=12,
+    fig_2.add_trace(
+        go.Bar(
+            x=avg_price_by_neighborhood["neighbourhood_cleansed"],
+            y=avg_price_by_neighborhood["mean"],
+            marker=dict(
+                color="rgba(255, 153, 51, 0.6)",
+                line=dict(color="rgba(255, 153, 51, 1.0)", width=3),
+            ),
+            hovertemplate="$%{y:.2f}<extra></extra>",
         )
-
-    ax.set_title(
-        f"Average price of listings in {city.capitalize()} by neighbourhood (top 15)"
     )
-    ax.set_ylabel("Neighbourhood")
-    ax.set_xlabel("Average price")
 
-    return num_listings_by_neighborhood, fig_1, fig_2
+    # Customize layout
+    fig_2.update_layout(
+        title=f"Average price of listings in {city.capitalize()} by neighbourhood (top 10)",
+        xaxis_title="Neighbourhood",
+        yaxis_title="Average price",
+        template="plotly_white",
+        height=600,
+        margin=dict(l=100, r=100, b=200, t=50),
+    )
+
+    # Format x-axis
+    fig_2.update_yaxes(
+        tickprefix=tickprefixes_city[city],
+        showgrid=True,
+        gridcolor="rgb(233,233,233)",
+    )
+
+    return fig_0, fig_1, fig_2
 
 
 @st.cache_data(persist=True)
@@ -119,36 +177,179 @@ def price_by_room_type(data: pd.DataFrame, city: str):
         .rename(columns={"index": "room_type", "room_type": "count"})
     )
 
-    # num_listings_by_room_type.style.background_gradient(
-    #     sns.light_palette("red", as_cmap=True)
-    # ).set_properties(**{"text-align": "center"}).set_table_styles(
-    #     [
-    #         dict(selector="th", props=[("text-align", "center")]),
-    #         dict(
-    #             selector="caption",
-    #             props=[("font-size", "14px"), ("font-weight", "bold")],
-    #         ),
-    #     ],
-    # ).set_caption(
-    #     f"Number of listings by room type in {city.capitalize()}"
-    # ).relabel_index(
-    #     {0: "Room type", 1: "# of listings"},
-    #     axis="columns",
-    # )
-
-    fig = plt.figure(figsize=(12, 10))
-    ax = sns.violinplot(
-        data=data,
-        x="room_type",
-        y="price",
-        hue="room_type",
-        order=num_listings_by_room_type.room_type.values,
+    # -------------------------------------------------------------------------
+    fig_0 = go.Figure(
+        data=[
+            go.Bar(
+                x=num_listings_by_room_type["room_type"],
+                y=num_listings_by_room_type["count"],
+                text=num_listings_by_room_type["count"],
+                hovertemplate="Number of listings: %{y}<extra></extra>",
+                marker_color=px.colors.qualitative.Set1,
+            )
+        ]
     )
-    ax.set_title(f"Distribution of price in {city.capitalize()} listings by room type")
-    ax.set_ylabel("Price")
-    ax.set_xlabel("Room type")
+    fig_0.update_layout(
+        title=f"Number of Listings by Room Type in {city.capitalize()}",
+        xaxis_title="Room Type",
+        yaxis_title="Number of Listings",
+        template="plotly_white",
+        height=600,
+        margin=dict(l=100, r=100, b=200, t=50),
+    )
 
-    return num_listings_by_room_type, fig
+    fig_0.update_yaxes(
+        showgrid=True, gridcolor="rgb(233,233,233)", zerolinecolor="rgb(233,233,233)"
+    )
+
+    # -------------------------------------------------------------------------
+    # Distribution of price by room type using violin plot
+    fig_1 = go.Figure()
+
+    for room in num_listings_by_room_type.room_type.values:
+        fig_1.add_trace(
+            go.Violin(
+                y=data[data["room_type"] == room]["price"],
+                name=room,
+                box_visible=True,
+                meanline_visible=True,
+            )
+        )
+
+    fig_1.update_layout(
+        title=f"Distribution of Price by Room Type in {city.capitalize()}",
+        yaxis_title="Price",
+        xaxis_title="Room Type",
+        template="plotly_white",
+        height=600,
+        margin=dict(l=100, r=100, b=200, t=50),
+        showlegend=False,
+    )
+
+    fig_1.update_yaxes(
+        tickprefix=tickprefixes_city[city], showgrid=True, gridcolor="rgb(233,233,233)"
+    )
+
+    return fig_0, fig_1
+
+
+@st.cache_data(persist=True)
+def price_by_amenities(data: pd.DataFrame, city: str):
+    list_of_amenities = (
+        data["amenities"]
+        .str.split(", ")
+        .explode()
+        .value_counts()
+        .to_frame()
+        .reset_index()
+    )
+
+    top_20_amenities = list_of_amenities.head(20)
+
+    # -------------------------------------------------------------------------
+    colors = px.colors.qualitative.Set1 * (
+        len(top_20_amenities) // len(px.colors.qualitative.Set1) + 1
+    )
+
+    fig_0 = go.Figure(
+        data=[
+            go.Bar(
+                x=top_20_amenities["index"],
+                y=top_20_amenities["amenities"],
+                text=top_20_amenities["amenities"],
+                hovertemplate="Number of listings: %{y}<extra></extra>",
+                marker_color=colors,
+            )
+        ]
+    )
+
+    fig_0.update_layout(
+        title=f"Number of Listings by Amenities in {city.capitalize()}",
+        xaxis_title="Amenities",
+        yaxis_title="Number of Listings",
+        template="plotly_white",
+        height=600,
+        margin=dict(l=100, r=100, b=200, t=50),
+    )
+
+    fig_0.update_yaxes(
+        showgrid=True, gridcolor="rgb(233,233,233)", zerolinecolor="rgb(233,233,233)"
+    )
+
+    # -------------------------------------------------------------------------
+    # Distribution of price by amenities using violin plot
+
+    def create_violin_for_amenity(data, amenity):
+        fig = go.Figure()
+
+        for present in ["Yes", "No"]:
+            fig.add_trace(
+                go.Violin(
+                    x=data["amenity"][
+                        (data["amenity"] == amenity)
+                        & (data["amenity_present"] == present)
+                    ],
+                    y=data["price"][
+                        (data["amenity"] == amenity)
+                        & (data["amenity_present"] == present)
+                    ],
+                    name=present,
+                    side="negative" if present == "Yes" else "positive",
+                    line_color="green" if present == "Yes" else "red",
+                    meanline_visible=True,
+                    hoveron="violins",
+                    points=False,
+                )
+            )
+
+        fig.update_layout(
+            violingap=0.0, violinmode="overlay", title=amenity, yaxis_title="Price"
+        )
+
+        return fig
+
+    # Prepare data
+    data_1 = (
+        data.loc[:, ["price"] + top_20_amenities["index"].tolist()[:5]]
+        .melt(id_vars="price", var_name="amenity", value_name="amenity_present")
+        .replace({1: "Yes", 0: "No"})
+    )
+
+    data_2 = (
+        data.loc[:, ["price"] + top_20_amenities["index"].tolist()[6:11]]
+        .melt(id_vars="price", var_name="amenity", value_name="amenity_present")
+        .replace({1: "Yes", 0: "No"})
+    )
+
+    # Create subplots: 2 rows and 5 columns for 10 amenities
+    fig_1 = make_subplots(
+        rows=2, cols=5, subplot_titles=top_20_amenities["index"].tolist()[:10]
+    )
+
+    # Generate plots for each amenity
+    for i, amenity in enumerate(top_20_amenities["index"].tolist()[:5], 1):
+        amenity_fig = create_violin_for_amenity(data_1, amenity)
+        for trace in amenity_fig.data:
+            fig_1.add_trace(trace, row=1, col=i)
+
+    for i, amenity in enumerate(top_20_amenities["index"].tolist()[6:11], 1):
+        amenity_fig = create_violin_for_amenity(data_2, amenity)
+        for trace in amenity_fig.data:
+            fig_1.add_trace(trace, row=2, col=i)
+
+    # Update layout
+    fig_1.update_layout(
+        title_text=f"Distribution of price in {city.capitalize()} for top 10 amenities",
+        template="plotly_white",
+        showlegend=False,
+        height=800,
+    )
+
+    fig_1.update_yaxes(
+        tickprefix=tickprefixes_city[city], showgrid=True, gridcolor="rgb(233,233,233)"
+    )
+
+    return fig_0, fig_1
 
 
 @st.cache_resource
