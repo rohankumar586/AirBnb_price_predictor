@@ -131,16 +131,15 @@ if city:
         with tab_6:
             st.markdown("## Machine Learning")
 
-            user_input = model.get_user_input(data)
+            submitted, user_input = model.get_user_input(data)
 
-            user_input.to_csv("./data/user_input.csv", index=False)
+            if submitted:
+                # st.dataframe(user_input.T, use_container_width=True)
 
-            st.dataframe(user_input.T, use_container_width=True)
+                prediction = model.predict(rf, user_input)
 
-            prediction = model.predict(rf, user_input)
-
-            st.markdown(
-                f"""
-                ### Predicted Price: ${round(prediction[0], 2)}
-                """
-            )
+                st.markdown(
+                    f"""
+                    ### Predicted Price: ${round(prediction[0], 2)}
+                    """
+                )
