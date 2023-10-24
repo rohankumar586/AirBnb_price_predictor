@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 import preprocess as preprocess
 import plots as plots
+import model as model
 
 # Set the page title and icon
 st.set_page_config(page_title="Airbnb EDA", page_icon=":house:", layout="wide")
@@ -38,19 +39,23 @@ if city:
     st.title(f"Airbnb Analysis: {city.capitalize()}")
     with st.container():
         city_name, file = city, cities[city]
+
+        rf = model.load_model(city_name)
+
         data = load_data(file)
         print(
             f"Data loaded for {city_name}. {data.shape[0]} rows and {data.shape[1]} columns."  # noqa: E501
         )
 
         # Tabs to select different plots
-        tab_1, tab_2, tab_3, tab_4, tab_5 = st.tabs(
+        tab_1, tab_2, tab_3, tab_4, tab_5, tab_6 = st.tabs(
             [
                 "Price Distribution",
                 "Map of Listings",
                 "Price by Neighbourhood",
                 "Price by Room Type",
                 "Price by Amenities",
+                "ML",
             ]
         )
 
@@ -122,3 +127,20 @@ if city:
             st.plotly_chart(price_by_amenities[0], use_container_width=True)
 
             st.plotly_chart(price_by_amenities[1], use_container_width=True)
+
+        with tab_6:
+            st.markdown("## Machine Learning")
+
+            user_input = model.get_user_input(data)
+
+            user_input.to_csv("./data/user_input.csv", index=False)
+
+            st.dataframe(user_input.T, use_container_width=True)
+
+            prediction = model.predict(rf, user_input)
+
+            st.markdown(
+                f"""
+                ### Predicted Price: ${round(prediction[0], 2)}
+                """
+            )
