@@ -5,11 +5,24 @@ import pandas as pd
 import numpy as np
 import joblib
 
+tickprefixes_city = {
+    "Boston": "US$",
+    "Hongkong": "HK$",
+    "Montreal": "CA$",
+    "Munich": "€",
+    "Vancouver": "CA$",
+}
+
 
 @st.cache_resource
 def load_model(city):
     model = joblib.load(f"./models/{city}_random_forest.joblib")
-    return model
+    with open(f"./models/{city}_features_to_drop.txt", "r") as f:
+        features_to_drop = f.read().splitlines()
+
+    print(f"Model loaded for {city}.")
+
+    return model, features_to_drop
 
 
 def create_selectbox(row_item: row, data: pd.DataFrame, column: str, label: str = None):
@@ -27,7 +40,7 @@ def create_selectbox(row_item: row, data: pd.DataFrame, column: str, label: str 
     return selectbox, options
 
 
-def get_user_input(data: pd.DataFrame):
+def get_user_input(data: pd.DataFrame, features_to_drop: list):
     list_of_amenities = sorted(
         (
             data["amenities"]
@@ -40,11 +53,13 @@ def get_user_input(data: pd.DataFrame):
         )["index"].tolist()
     )
 
-    host_verification_time_options = [
-        "host_verification_email",
-        "host_verification_phone",
-        "host_verification_work_email",
-    ]
+    host_verification_options = (
+        data["host_verifications"]
+        .str.replace(r"\[|\]|\'", "")
+        .str.get_dummies(sep=", ")
+        .rename(lambda x: "host_verification_" + x, axis=1)
+        .astype("uint8")
+    ).columns.tolist()
 
     with st.form("input_form"):
         with st.expander("**Listing information**", expanded=True):
@@ -100,9 +115,9 @@ def get_user_input(data: pd.DataFrame):
                 host_detail, data, "host_response_time", label="Host Response Time"
             )
 
-            host_verification_time = host_detail.multiselect(
+            host_verification = host_detail.multiselect(
                 "Host Verification",
-                options=host_verification_time_options,
+                options=host_verification_options,
                 format_func=lambda x: x.split("_", maxsplit=2)[-1].capitalize(),
             )
 
@@ -143,7 +158,7 @@ def get_user_input(data: pd.DataFrame):
         ]
 
         columns.extend(list_of_amenities)
-        columns.extend(host_verification_time_options)
+        columns.extend(host_verification_options)
         columns.extend(host_response_time_options)
         columns.extend(neighbourhood_options)
         columns.extend(room_type_options)
@@ -172,7 +187,7 @@ def get_user_input(data: pd.DataFrame):
         for amenity in amenities:
             user_input[amenity] = 1
 
-        for verification in host_verification_time:
+        for verification in host_verification:
             user_input[verification] = 1
 
         user_input[room_type] = 1
@@ -180,11 +195,14 @@ def get_user_input(data: pd.DataFrame):
         user_input[bathrooms_text] = 1
         user_input[host_response_time] = 1
 
+        user_input.drop(features_to_drop, axis=1, inplace=True)
+
         return submitted, user_input
     else:
         return submitted, None
 
 
-def predict(model, input):
-    prediction = model["model"].named_steps["model"].predict(input)
-    return np.exp(prediction)
+def predict(model, input, city):
+    prediction = model["model"].named_steps["model"].predict(input).item()
+
+    return (tickprefixes_city[city], np.exp(prediction))

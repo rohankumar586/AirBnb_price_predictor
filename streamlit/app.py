@@ -1,5 +1,4 @@
 import os
-from pyparsing import col
 import streamlit as st
 import pandas as pd
 import preprocess as preprocess
@@ -40,7 +39,7 @@ if city:
     with st.container():
         city_name, file = city, cities[city]
 
-        rf = model.load_model(city_name)
+        rf, features_to_drop = model.load_model(city_name)
 
         data = load_data(file)
         print(
@@ -62,7 +61,7 @@ if city:
         with tab_1:
             st.markdown("## Price Distribution Overview")
             st.markdown(
-                "This tab shows the overall distribution of listing prices within the selected city."
+                "This tab shows the overall distribution of listing prices within the selected city."  # noqa: E501
             )
             st.plotly_chart(
                 plots.price_distribution(data, city_name), use_container_width=True
@@ -79,7 +78,7 @@ if city:
                 """
                 Explore how listing prices vary by neighborhood. 
                 Insights include the count of listings, price distribution, and average prices per neighborhood.
-                """
+                """  # noqa: E501
             )
 
             # Organizing content in columns
@@ -100,7 +99,7 @@ if city:
                 """
                 Explore how listing prices vary by room type. 
                 Insights include the count of listings and price distribution by room type.
-                """
+                """  # noqa: E501
             )
 
             price_by_room_type = plots.price_by_room_type(data, city_name)
@@ -119,7 +118,7 @@ if city:
                 """
                 Explore how listing prices vary by amenities. 
                 Insights include the count of listings and price distribution by amenities for the top 20 amenities.
-                """
+                """  # noqa: E501
             )
 
             price_by_amenities = plots.price_by_amenities(data, city_name)
@@ -131,15 +130,14 @@ if city:
         with tab_6:
             st.markdown("## Machine Learning")
 
-            submitted, user_input = model.get_user_input(data)
+            submitted, user_input = model.get_user_input(data, features_to_drop)
 
             if submitted:
                 # st.dataframe(user_input.T, use_container_width=True)
 
-                prediction = model.predict(rf, user_input)
-
+                currency_prefix, prediction = model.predict(rf, user_input, city_name)
                 st.markdown(
                     f"""
-                    ### Predicted Price: ${round(prediction[0], 2)}
+                    #### Predicted Price: {currency_prefix}{prediction:.2f}
                     """
                 )
