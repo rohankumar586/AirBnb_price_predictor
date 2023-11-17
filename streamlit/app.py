@@ -128,7 +128,7 @@ if city:
             st.plotly_chart(price_by_amenities[1], use_container_width=True)
 
         with tab_6:
-            st.markdown("## Machine Learning")
+            st.markdown("#### Machine Learning")
 
             submitted, user_input = model.get_user_input(data, features_to_drop)
 
@@ -138,6 +138,6 @@ if city:
                 currency_prefix, prediction = model.predict(rf, user_input, city_name)
                 st.markdown(
                     f"""
-                    #### Predicted Price: {currency_prefix}{prediction:.2f}
+                    #### Predicted Price: {currency_prefix}{prediction:.2f} / night
                     """
                 )

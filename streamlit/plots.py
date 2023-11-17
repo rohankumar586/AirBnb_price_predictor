@@ -102,8 +102,8 @@ def price_by_neighbourhood(data: pd.DataFrame, city: str):
     # Update layout for a cleaner presentation
     fig_1.update_layout(
         title=f"Distribution of price in {city.capitalize()} by neighbourhood (top 10)",
-        xaxis_title="Price",
-        yaxis_title="Neighbourhood",
+        yaxis_title="Price",
+        xaxis_title="Neighbourhood",
         showlegend=False,
         template="plotly_white",
         height=600,
@@ -360,7 +360,7 @@ def visualize_on_map(data: pd.DataFrame):
         tiles=None,
     )
 
-    folium.TileLayer("cartodbpositron", opacity=0.8, control=False).add_to(map)
+    folium.TileLayer("cartodbpositron", opacity=1, control=False).add_to(map)
 
     # Create a color scale based on the price of listings in data
     vmin = data["price"].quantile(0.05)

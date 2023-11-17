@@ -55,7 +55,7 @@ def get_user_input(data: pd.DataFrame, features_to_drop: list):
 
     host_verification_options = (
         data["host_verifications"]
-        .str.replace(r"\[|\]|\'", "")
+        .str.replace(r"\[|\]|\'", "", regex=True)
         .str.get_dummies(sep=", ")
         .rename(lambda x: "host_verification_" + x, axis=1)
         .astype("uint8")
@@ -106,7 +106,7 @@ def get_user_input(data: pd.DataFrame, features_to_drop: list):
             has_availability = booking_details.toggle("Has Availability?", value=True)
             instant_bookable = booking_details.checkbox("Is it bookable instantly?")
             availability_365 = booking_details.number_input(
-                "The availability of the listing 365 days in the future", value=1
+                "The availability of the listing 365 days in the future", value=30
             )
 
         with st.expander("**Host information**"):
