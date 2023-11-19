@@ -17,7 +17,7 @@ def load_data(city):
 
 
 # Get filename of cities in data folder
-cities = os.listdir("./data")
+cities = sorted(os.listdir("./data"))
 city_names = [city.split(".")[0].capitalize() for city in cities]
 cities = dict(zip(city_names, cities))
 
@@ -26,8 +26,8 @@ with st.sidebar:
     st.title("Navigation")
     st.markdown(
         """
-    This application provides various visualizations for Airbnb data analysis. 
-    Select a city from the dropdown menu to view specific insights.
+    ## This application provides various visualizations for Airbnb data analysis. 
+    ### Select a city from the dropdown menu to view specific insights.
     """
     )
     st.header("Select a city")
@@ -49,12 +49,12 @@ if city:
         # Tabs to select different plots
         tab_1, tab_2, tab_3, tab_4, tab_5, tab_6 = st.tabs(
             [
-                "Price Distribution",
-                "Map of Listings",
-                "Price by Neighbourhood",
-                "Price by Room Type",
-                "Price by Amenities",
-                "ML",
+                "📊 Price Distribution",
+                "📌 Map of Listings",
+                "🍁 Price by Neighbourhood",
+                "🏡 Price by Room Type",
+                "📶 Price by Amenities",
+                "🤑 Predict price",
             ]
         )
 
@@ -128,7 +128,13 @@ if city:
             st.plotly_chart(price_by_amenities[1], use_container_width=True)
 
         with tab_6:
-            st.markdown("#### Machine Learning")
+            st.markdown("## Predict the price of a listing")
+            st.markdown(
+                """
+                Enter the details of the listing you want to predict the price for. 
+                The model will predict the price based on the input provided.
+                """  # noqa: E501
+            )
 
             submitted, user_input = model.get_user_input(data, features_to_drop)
 

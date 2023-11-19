@@ -16,8 +16,8 @@ tickprefixes_city = {
 
 @st.cache_resource
 def load_model(city):
-    model = joblib.load(f"./models/{city}_random_forest.joblib")
-    with open(f"./models/{city}_features_to_drop.txt", "r") as f:
+    model = joblib.load(f"./streamlit/models/{city.lower()}_random_forest.gzip")
+    with open(f"./streamlit/models/{city.lower()}_features_to_drop.txt", "r") as f:
         features_to_drop = f.read().splitlines()
 
     print(f"Model loaded for {city}.")

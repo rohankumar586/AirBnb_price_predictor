@@ -5,3 +5,6 @@ matplotlib==3.7.1
 seaborn==0.13.0
 plotly==5.15.0
 scipy==1.10.1
+streamlit-extras==0.3.0
+joblib==1.2.0
+scikit-learn==1.2.2
