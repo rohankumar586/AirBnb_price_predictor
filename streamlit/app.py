@@ -18,7 +18,7 @@ def load_data(city):
 
 # Get filename of cities in data folder
 cities = os.listdir("./data")
-city_names = [city.split(".")[0].capitalize() for city in cities]
+city_names = sorted([city.split(".")[0].capitalize() for city in cities])
 cities = dict(zip(city_names, cities))
 
 # Create a selectbox to choose a city
