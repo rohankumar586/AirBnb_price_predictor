@@ -1,6 +1,28 @@
-# Airbnb Listing Price Prediction
+# Airbnb Price Predictor: A Data-Driven Journey to Optimizing Listing Prices - INSY 662
 
-The primary objective of this project is to build a predictive model that can accurately forecast the price of Airbnb listings based on various features. This model will help both hosts in setting competitive prices and guests in finding the best value for their money.
+## Introduction
+This project is more than just a model; it's a tool that empowers both new and existing Airbnb hosts to optimize their listings for success.
+
+## The Challenge
+In the dynamic world of Airbnb hosting, setting the right price is crucial. Price too high, and you miss potential bookings; too low, and you're leaving money on the table. Recognizing this dilemma faced by hosts, I set out to a solution that balances attractiveness to guests with profitability for hosts.
+
+## The Solution: Airbnb Price Predictor
+My solution, the Airbnb Price Predictor, is a machine-learning model designed to help new hosts price their listings accurately and enable existing hosts to adjust prices to maximize bookings. It considers various factors, such as location, type of listing and amenities offered by the listing (and much more) ensuring a comprehensive approach to pricing.
+
+## How It Works
+
+- **Data Collection and Analysis**: The dataset is available on [Inside Airbnb](http://insideairbnb.com/get-the-data). I focused on understanding the elements that most significantly impact pricing, such as location, amenities, and host reputation.
+- **Model Development**: Leveraging machine learning algorithms, we developed a model that predicts optimal pricing based on the analyzed factors. 
+- **User-Friendly Interface**: Understanding the importance of accessibility, I designed a user-friendly interface that allows hosts to input their listing's features and receive a suggested price instantly. Along with my team, we hosted it on [Streamlit](https://insy662-airbnb.streamlit.app/)
+
+## The Impact
+This tool offers a unique blend of data science and market insight, enabling hosts to:
+- **For New Hosts**: Accurately set competitive prices for their listings from the start.
+- **For Existing Hosts**: Continuously adjust prices in response to market changes, enhancing their ability to attract more customers and bookings.
+
+## Conclusion
+The Airbnb Price Predictor is more than just a project; it's a testament to the power of data in transforming everyday decisions. It exemplifies how analytics, when applied creatively, can solve real-world problems and add tangible value.
+
 
 ## Data source
 
